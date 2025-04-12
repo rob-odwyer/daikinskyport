@@ -165,7 +165,7 @@ class DaikinSkyportData:
             current = await self.hass.async_add_executor_job(self.daikinskyport.update)
             _LOGGER.debug("Daikin Skyport _async_update_data")
         except ExpiredTokenError:
-            _LOGGER.debug("Daikin Skyport tokens expired")
+            _LOGGER.warning("Daikin Skyport tokens expired")
             await self.async_refresh()
             await self.hass.async_add_executor_job(self.daikinskyport.update)
         _LOGGER.debug("Daikin Skyport data updated successfully")
@@ -175,6 +175,7 @@ class DaikinSkyportData:
         """Refresh tokens and update config entry."""
         _LOGGER.debug("Refreshing Daikin Skyport tokens and updating config entry")
         if await self.hass.async_add_executor_job(self.daikinskyport.refresh_tokens):
+            _LOGGER.info("Daikin Skyport tokens refreshed successfully")
             self.hass.config_entries.async_update_entry(
                 self.entry,
                 data={
