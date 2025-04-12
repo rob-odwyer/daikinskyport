@@ -332,8 +332,7 @@ class DaikinSkyport(object):
             return None
         if request.status_code == requests.codes.ok:
             return request
-        elif (request.status_code == 401 and retry_count == 0 and
-              request.json()['error'] == 'authorization_expired'):
+        elif request.status_code == 401 and retry_count == 0:
             if self.refresh_tokens():
                 return self.make_request(body, deviceID, log_msg_action,
                                          retry_count=retry_count + 1)
