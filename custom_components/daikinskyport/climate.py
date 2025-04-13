@@ -659,6 +659,8 @@ class Thermostat(ClimateEntity):
 
     def set_auto_temp_hold(self, heat_temp, cool_temp):
         """Set temperature hold in auto mode."""
+        _LOGGER.debug("set_auto_temp_hold: heat=%s cool=%s", heat_temp, cool_temp)
+
         if cool_temp is not None:
             cool_temp_setpoint = cool_temp
         else:
@@ -737,6 +739,7 @@ class Thermostat(ClimateEntity):
 
     def set_temp_hold(self, temp):
         """Set temperature hold in modes other than auto."""
+        _LOGGER.debug("set_temp_hold: %s", temp)
         if self.hvac_mode == HVACMode.HEAT:
             heat_temp = temp
             cool_temp = self.thermostat["cspHome"]
@@ -753,6 +756,7 @@ class Thermostat(ClimateEntity):
         low_temp = kwargs.get(ATTR_TARGET_TEMP_LOW)
         high_temp = kwargs.get(ATTR_TARGET_TEMP_HIGH)
         temp = kwargs.get(ATTR_TEMPERATURE)
+        _LOGGER.debug("Setting temperature: low=%s temp=%s high=%s", low_temp, temp, high_temp)
 
         if self.hvac_mode == HVACMode.AUTO and (
             low_temp is not None or high_temp is not None

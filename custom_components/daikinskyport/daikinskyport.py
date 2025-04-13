@@ -9,9 +9,7 @@ from requests.exceptions import RequestException
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 
-from .const import DAIKIN_PERCENT_MULTIPLIER
-
-logger = logging.getLogger('daikinskyport')
+from .const import DAIKIN_PERCENT_MULTIPLIER, _LOGGER as logger
 
 NEXT_SCHEDULE = 1
 
@@ -176,6 +174,8 @@ class DaikinSkyport(object):
 
     def get_thermostat_info(self, deviceid):
         ''' Retrieve the device info for the specific device '''
+        logger.debug("Polling device info for device %s", deviceid)
+
         url = 'https://api.daikinskyport.com/deviceData/' + deviceid
         header = {'Content-Type': 'application/json;charset=UTF-8',
                   'Authorization': 'Bearer ' + self.access_token}
@@ -201,6 +201,8 @@ class DaikinSkyport(object):
             return None
         if request.status_code == requests.codes.ok:
             self.authenticated = True
+            logger.debug("Successfully polled device info for device %s", deviceid)
+
             return request.json()
         else:
             self.authenticated = False
