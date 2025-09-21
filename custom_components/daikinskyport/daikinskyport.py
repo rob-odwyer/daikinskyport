@@ -338,8 +338,12 @@ class DaikinSkyport(object):
             logger.warning("Received HTTP 401 from Daikin Skyport.  Attempting to refresh tokens.")
             if self.refresh_tokens():
                 logger.info("Successfully refreshed tokens, attempting to repeat request")
-                return self.make_request(body, deviceID, log_msg_action,
-                                         retry_count=retry_count + 1)
+                return self.make_request(
+                    index=index,
+                    body=body,
+                    log_msg_action=log_msg_action,
+                    retry_count=retry_count + 1,
+                )
         else:
             logger.warn(
                 "Error fetching data from Daikin Skyport while attempting to %s: %s",
