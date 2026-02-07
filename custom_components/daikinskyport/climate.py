@@ -767,9 +767,6 @@ class Thermostat(ClimateEntity):
         else:
             _LOGGER.error("Missing valid arguments for set_temperature in %s", kwargs)
 
-        self._cool_setpoint = high_temp
-        self._heat_setpoint = low_temp
-
 
     def set_humidity(self, humidity):
         """Set the humidity level."""
