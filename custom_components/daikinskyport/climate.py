@@ -440,15 +440,18 @@ class Thermostat(ClimateEntity):
 
     async def async_update(self):
         """Get the latest state from the thermostat."""
+        skip_setpoint_update = False
         if self.update_without_throttle:
+            skip_setpoint_update = True
             await self.data._async_update_data(no_throttle=True)
             self.update_without_throttle = False
         else:
             await self.data._async_update_data()
 
         self.thermostat = self.data.daikinskyport.get_thermostat(self.thermostat_index)
-        self._cool_setpoint = self.thermostat["cspActive"]
-        self._heat_setpoint = self.thermostat["hspActive"]
+        if not skip_setpoint_update:
+            self._cool_setpoint = self.thermostat["cspActive"]
+            self._heat_setpoint = self.thermostat["hspActive"]
         self._hvac_mode = DAIKIN_HVAC_TO_HASS[self.thermostat["mode"]]
         if DAIKIN_FAN_TO_HASS[self.thermostat["fanCirculate"]] == FAN_ON:
             self._fan_mode = DAIKIN_FAN_TO_HASS[self.thermostat["fanCirculateSpeed"] + 3]
